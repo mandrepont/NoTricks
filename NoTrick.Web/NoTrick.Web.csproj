@@ -14,4 +14,9 @@
     <ProjectReference Include="..\NoTricks.Data\NoTricks.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Foo\Error.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Foo\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
