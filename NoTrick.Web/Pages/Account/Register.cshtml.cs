@@ -1,17 +1,24 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using NoTricks.Data.Models;
+using NoTricks.Data.Repositories;
 
 namespace NoTrick.Web.Pages.Account {
     [AllowAnonymous]
     public class RegisterModel : PageModel {
         private readonly ILogger<RegisterModel> _logger;
+        private readonly IAccountRepo _accountRepo;
 
-        public RegisterModel(
-            ILogger<RegisterModel> logger) {
+        public RegisterModel(ILogger<RegisterModel> logger,
+                             IAccountRepo accountRepo) {
             _logger = logger;
+            _accountRepo = accountRepo;
         }
 
         [BindProperty] public InputModel Input { get; set; }
@@ -40,5 +47,33 @@ namespace NoTrick.Web.Pages.Account {
         public void OnGet(string returnUrl = null) {
             ReturnUrl = returnUrl;
         }
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null) {
+            
+            returnUrl ??= Url.Content("~/");
+
+            if (ModelState.IsValid) {
+                var passwordHash = PasswordHasher.HashPassword(Input.Password);
+                var account = new NoTricks.Data.Models.Account {
+                    EMail = Input.Email,
+                    PasswordHash = passwordHash.Item1,
+                    PasswordSalt = passwordHash.Item2,
+                    CreatedAt = DateTime.Now,
+                    Status = AccountStatus.Pending_Verification
+                };
+                try {
+                    _accountRepo.Insert(account);
+                    //TODO: SEND EMAIL
+                    return LocalRedirect(returnUrl);
+                }
+                catch (Exception e) {
+                    //TODO: Add better error checking here. 
+                    _logger.LogWarning($"Error when registering user {account.EMail}", e);
+                    ModelState.AddModelError("All", "Error when creating the account. Email in use.");
+                }
+            }
+
+            return Page();
+        }
+        
     }
 }

@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection {
             
             services.AddSingleton(new NoTricksConnectionString(connectionString));
             //Add repositories (Might be an easier way to do this via generic types, but then we would be too close to a generic ORM which we cannot have in this project)
-            services.AddSingleton<IAccountRepo>();
+            services.AddSingleton<IAccountRepo, AccountRepo>();
             
             return services;
         }
