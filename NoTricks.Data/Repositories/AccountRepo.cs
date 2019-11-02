@@ -46,6 +46,26 @@ namespace NoTricks.Data.Repositories {
                 return conn.QuerySingleOrDefault<Account>(sql, new {Id = id});
             }
         }
+        
+        public Account GetByEmail(string email) {
+            using (var conn = new MySqlConnection(_connStr)) {
+                conn.Open();
+                var sql = $@"
+                    SELECT 
+                      Id AS {nameof(Account.Id)},
+                      Email AS {nameof(Account.EMail)},
+                      PasswordHash AS {nameof(Account.PasswordHash)},
+                      PasswordSalt AS {nameof(Account.PasswordSalt)},
+                      Status AS {nameof(Account.Status)},
+                      CreatedAt AS {nameof(Account.CreatedAt)},
+                      LastLoginAt AS {nameof(Account.LastLoginAt)},
+                      LastModifiedAt AS {nameof(Account.LastModifiedAt)}
+                    FROM Accounts
+                    WHERE Email = @Email;
+                ";
+                return conn.QuerySingleOrDefault<Account>(sql, new {Email = email});
+            }
+        }
 
         public bool Remove(int Id) {
             using (var conn = new MySqlConnection(_connStr)) {
