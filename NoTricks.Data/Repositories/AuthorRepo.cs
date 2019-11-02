@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using MySql.Data.MySqlClient;
+using System.Linq;
 using NoTricks.Data.Models;
+using Dapper;
 
 namespace NoTricks.Data.Repositories {
     public interface IAuthorRepo : IRepository<Author> { }
@@ -12,23 +15,73 @@ namespace NoTricks.Data.Repositories {
         }
         
         public int Insert(Author model) {
-            throw new System.NotImplementedException();
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                INSERT INTO Authors(FirstName, LastName, PenName, Birthday)
+                VALUES (
+                    @{nameof(Author.FirstName)}, @{nameof(Author.LastName)},
+                    @{nameof(Author.PenName)}, @{nameof(Author.Birthday)}
+                );
+                SELECT @@IDENTITY;
+            ";
+            
+            return conn.Query<int>(sql, model).Single();
         }
 
         public Author GetById(int id) {
-            throw new System.NotImplementedException();
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                    SELECT 
+                      Id AS {nameof(Author.Id)},
+                      FirstName AS {nameof(Author.FirstName)},
+                      LastName AS {nameof(Author.LastName)},
+                      PenName AS {nameof(Author.PenName)},
+                      Birthday AS {nameof(Author.Birthday)},
+                    FROM Authors
+                    WHERE Id = @Id;
+                ";
+            return conn.QuerySingleOrDefault<Author>(sql, new {Id = id});
         }
 
         public IEnumerable<Author> GetAll() {
-            throw new System.NotImplementedException();
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                  SELECT 
+                    Id AS {nameof(Author.Id)},
+                    FirstName AS {nameof(Author.FirstName)},
+                    LastName AS {nameof(Author.LastName)},
+                    PenName AS {nameof(Author.PenName)},
+                    Birthday AS {nameof(Author.Birthday)},
+                  FROM Authors
+                  WHERE Id = @Id;
+            ";
+            return conn.Query<Author>(sql);
         }
 
         public bool Remove(int id) {
-            throw new System.NotImplementedException();
+            using var conn = new MySqlConnection(_connStr); 
+            conn.Open();
+            var sql = @"
+                DELETE FROM Author WHERE Id = @Id
+            ";
+            return conn.Execute(sql, new {id}) == 1;
         }
 
         public bool Update(Author model) {
-            throw new System.NotImplementedException();
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                UPDATE Accounts SET
+                  FirstName AS {nameof(Author.FirstName)},
+                  LastName AS {nameof(Author.LastName)},
+                  PenName AS {nameof(Author.PenName)},
+                  Birthday AS {nameof(Author.Birthday)},
+                WHERE Id = @{nameof(Author.Id)}
+            ";
+            return conn.Execute(sql, model) == 1;
         }
     }
 }
