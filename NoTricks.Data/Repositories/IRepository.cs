@@ -1,8 +1,8 @@
 namespace NoTricks.Data.Repositories {
     public interface IRepository<T> {
-        T Insert(T model);
+        int Insert(T model);
         T GetById(int id);
-        bool Remove(T model);
+        bool Remove(int id);
         bool Update(T model);
     }
 }
