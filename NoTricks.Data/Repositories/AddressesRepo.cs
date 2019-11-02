@@ -18,7 +18,7 @@ namespace NoTricks.Data.Repositories {
                     INSERT INTO Addresses (Id, StreetAddress1, StreetAddress2, ZipCode, City, State)
                     VALUES(
                       @{nameof(Addresses.Id)}, @{nameof(Addresses.StreetAddress1)}, @{nameof(Addresses.StreetAddress2)},
-                      @{nameof(Addresses.ZipCode)}, @{nameof(Addresses.City)}, @{nameof(Addresses.State)},
+                      @{nameof(Addresses.ZipCode)}, @{nameof(Addresses.City)}, @{nameof(Addresses.State)}
                     );
                     SELECT @@IDENTITY;    
                 ";
