@@ -6,6 +6,10 @@ using MySql.Data.MySqlClient;
 using Dapper;
 
 namespace NoTricks.Data.Repositories {
+    public interface IAccountRepo : IRepository<Account> {
+        Account GetByEmail(string email);
+    }
+    
     public class AccountRepo : IAccountRepo {
         private readonly string _connStr;
 
