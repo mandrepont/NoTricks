@@ -6,7 +6,7 @@ using MySql.Data.MySqlClient;
 using Dapper;
 
 namespace NoTricks.Data.Repositories {
-    public class AccountRepo : IRepository<Account> {
+    public class AccountRepo : IAccountRepo {
         private readonly string _connStr;
 
         public AccountRepo(NoTricksConnectionString connStr) {
@@ -86,13 +86,13 @@ namespace NoTricks.Data.Repositories {
             }
         }
 
-        public bool Remove(int Id) {
+        public bool Remove(int id) {
             using (var conn = new MySqlConnection(_connStr)) {
                 conn.Open();
                 var sql = @"
                     DELETE FROM Accounts WHERE Id = @Id
                 ";
-                return conn.Execute(sql, new {Id}) == 1;
+                return conn.Execute(sql, new {Id = id}) == 1;
             }
         }
 
