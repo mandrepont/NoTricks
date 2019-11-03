@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NoTricks.Data.Models;
 using MySql.Data.MySqlClient;
@@ -28,9 +29,9 @@ namespace NoTricks.Data.Repositories {
         }
 
         public Account GetById(int id) {
-            using (var conn = new MySqlConnection(_connStr)) {
-                conn.Open();
-                var sql = $@"
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
                     SELECT 
                       Id AS {nameof(Account.Id)},
                       Email AS {nameof(Account.EMail)},
@@ -43,10 +44,28 @@ namespace NoTricks.Data.Repositories {
                     FROM Accounts
                     WHERE Id = @Id;
                 ";
-                return conn.QuerySingleOrDefault<Account>(sql, new {Id = id});
+            return conn.QuerySingleOrDefault<Account>(sql, new {Id = id});
+        }
+
+        public IEnumerable<Account> GetAll() {
+            using (var conn = new MySqlConnection(_connStr)) {
+                conn.Open();
+                var sql = $@"
+                    SELECT 
+                      Id AS {nameof(Account.Id)},
+                      Email AS {nameof(Account.EMail)},
+                      PasswordHash AS {nameof(Account.PasswordHash)},
+                      PasswordSalt AS {nameof(Account.PasswordSalt)},
+                      Status AS {nameof(Account.Status)},
+                      CreatedAt AS {nameof(Account.CreatedAt)},
+                      LastLoginAt AS {nameof(Account.LastLoginAt)},
+                      LastModifiedAt AS {nameof(Account.LastModifiedAt)}
+                    FROM Accounts               
+                ";
+                return conn.Query<Account>(sql);
             }
         }
-        
+
         public Account GetByEmail(string email) {
             using (var conn = new MySqlConnection(_connStr)) {
                 conn.Open();
