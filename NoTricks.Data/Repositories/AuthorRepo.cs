@@ -18,12 +18,14 @@ namespace NoTricks.Data.Repositories {
             using var conn = new MySqlConnection(_connStr);
             conn.Open();
             var sql = $@"
+                START TRANSACTION;
                 INSERT INTO Authors(FirstName, LastName, PenName, Birthday)
                 VALUES (
                     @{nameof(Author.FirstName)}, @{nameof(Author.LastName)},
                     @{nameof(Author.PenName)}, @{nameof(Author.Birthday)}
                 );
                 SELECT @@IDENTITY;
+                COMMIT;
             ";
             
             return conn.Query<int>(sql, model).Single();
@@ -38,7 +40,7 @@ namespace NoTricks.Data.Repositories {
                       FirstName AS {nameof(Author.FirstName)},
                       LastName AS {nameof(Author.LastName)},
                       PenName AS {nameof(Author.PenName)},
-                      Birthday AS {nameof(Author.Birthday)},
+                      Birthday AS {nameof(Author.Birthday)}
                     FROM Authors
                     WHERE Id = @Id;
                 ";
@@ -54,8 +56,8 @@ namespace NoTricks.Data.Repositories {
                     FirstName AS {nameof(Author.FirstName)},
                     LastName AS {nameof(Author.LastName)},
                     PenName AS {nameof(Author.PenName)},
-                    Birthday AS {nameof(Author.Birthday)},
-                  FROM Authors          
+                    Birthday AS {nameof(Author.Birthday)}
+                  FROM Authors;          
             ";
             return conn.Query<Author>(sql);
         }
@@ -74,11 +76,11 @@ namespace NoTricks.Data.Repositories {
             conn.Open();
             var sql = $@"
                 UPDATE Accounts SET
-                  FirstName AS {nameof(Author.FirstName)},
-                  LastName AS {nameof(Author.LastName)},
-                  PenName AS {nameof(Author.PenName)},
-                  Birthday AS {nameof(Author.Birthday)},
-                WHERE Id = @{nameof(Author.Id)}
+                  FirstName = @{nameof(Author.FirstName)},
+                  LastName = @{nameof(Author.LastName)},
+                  PenName = @{nameof(Author.PenName)},
+                  Birthday = @{nameof(Author.Birthday)}
+                WHERE Id = @{nameof(Author.Id)};
             ";
             return conn.Execute(sql, model) == 1;
         }
