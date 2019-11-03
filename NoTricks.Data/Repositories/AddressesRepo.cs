@@ -1,24 +1,29 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Dapper;
 using MySql.Data.MySqlClient;
 using NoTricks.Data.Models;
 
 namespace NoTricks.Data.Repositories {
-    public class AddressesRepo : IRepository<Addresses> {
+    public interface IAddressRepo : IRepository<Address> {
+    }
+
+    public class AddressesRepo : IAddressRepo {
         private readonly string _connStr;
-        
+
         public AddressesRepo(NoTricksConnectionString connStr) {
             _connStr = connStr.Value;
         }
-        
-        public int Insert(Addresses model) {
+
+        public int Insert(Address model) {
             using (var conn = new MySqlConnection(_connStr)) {
                 conn.Open();
                 var sql = $@"
                     INSERT INTO Addresses (Id, StreetAddress1, StreetAddress2, ZipCode, City, State)
                     VALUES(
-                      @{nameof(Addresses.Id)}, @{nameof(Addresses.StreetAddress1)}, @{nameof(Addresses.StreetAddress2)},
-                      @{nameof(Addresses.ZipCode)}, @{nameof(Addresses.City)}, @{nameof(Addresses.State)}
+                      @{nameof(Address.Id)}, @{nameof(Address.StreetAddress1)}, @{nameof(Address.StreetAddress2)},
+                      @{nameof(Address.ZipCode)}, @{nameof(Address.City)}, @{nameof(Address.State)}
                     );
                     SELECT @@IDENTITY;    
                 ";
@@ -26,23 +31,40 @@ namespace NoTricks.Data.Repositories {
             }
         }
 
-        public Addresses GetById(int id) {
+        public Address GetById(int id) {
             using (var conn = new MySqlConnection(_connStr)) {
                 conn.Open();
                 var sql = $@"
                     SELECT
-                      Id AS {nameof(Addresses.Id)},
-                      StreetAddress1 AS {nameof(Addresses.StreetAddress1)},
-                      StreetAddress2 AS {nameof(Addresses.StreetAddress2)},
-                      ZipCode AS {nameof(Addresses.ZipCode)},
-                      City AS {nameof(Addresses.City)},
-                      State AS {nameof(Addresses.State)},
+                      Id AS {nameof(Address.Id)},
+                      StreetAddress1 AS {nameof(Address.StreetAddress1)},
+                      StreetAddress2 AS {nameof(Address.StreetAddress2)},
+                      ZipCode AS {nameof(Address.ZipCode)},
+                      City AS {nameof(Address.City)},
+                      State AS {nameof(Address.State)},
                     FROM Addresses
                     WHERE Id = @Id;
                 ";
-                
-                return conn.QuerySingleOrDefault<Addresses>(sql, new {Id = id});
+
+                return conn.QuerySingleOrDefault<Address>(sql, new {Id = id});
             }
+        }
+
+        public IEnumerable<Address> GetAll() {
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                    SELECT
+                      Id AS {nameof(Address.Id)},
+                      StreetAddress1 AS {nameof(Address.StreetAddress1)},
+                      StreetAddress2 AS {nameof(Address.StreetAddress2)},
+                      ZipCode AS {nameof(Address.ZipCode)},
+                      City AS {nameof(Address.City)},
+                      State AS {nameof(Address.State)},
+                    FROM Addresses                   
+                ";
+
+            return conn.Query<Address>(sql);
         }
 
         public bool Remove(int id) {
@@ -55,18 +77,18 @@ namespace NoTricks.Data.Repositories {
             }
         }
 
-        public bool Update(Addresses model) {
+        public bool Update(Address model) {
             using (var conn = new MySqlConnection(_connStr)) {
                 conn.Open();
                 var sql = $@"
                     UPDATE Addresses SET
-                      StreetAddress1 = {nameof(Addresses.StreetAddress1)},
-                      StreetAddress2 = {nameof(Addresses.StreetAddress2)},
-                      ZipCode = {nameof(Addresses.ZipCode)},
-                      City = {nameof(Addresses.City)},
-                      State = {nameof(Addresses.State)},
+                      StreetAddress1 = {nameof(Address.StreetAddress1)},
+                      StreetAddress2 = {nameof(Address.StreetAddress2)},
+                      ZipCode = {nameof(Address.ZipCode)},
+                      City = {nameof(Address.City)},
+                      State = {nameof(Address.State)},
                     WHERE
-                      Id = {nameof(Addresses.Id)}
+                      Id = {nameof(Address.Id)}
                 ";
 
                 return conn.Execute(sql, model) == 1;
