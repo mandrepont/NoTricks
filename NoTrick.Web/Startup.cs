@@ -23,6 +23,7 @@ namespace NoTrick.Web {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             
             services.AddHealthChecks();
+            services.AddNoTricksDataServices(Configuration.GetConnectionString("NoTricks"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

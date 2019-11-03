@@ -1,17 +1,24 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using NoTricks.Data.Models;
+using NoTricks.Data.Repositories;
 
 namespace NoTrick.Web.Pages.Account {
     [AllowAnonymous]
     public class RegisterModel : PageModel {
         private readonly ILogger<RegisterModel> _logger;
+        private readonly IAccountRepo _accountRepo;
 
-        public RegisterModel(
-            ILogger<RegisterModel> logger) {
+        public RegisterModel(ILogger<RegisterModel> logger,
+                             IAccountRepo accountRepo) {
             _logger = logger;
+            _accountRepo = accountRepo;
         }
 
         [BindProperty] public InputModel Input { get; set; }
@@ -40,5 +47,34 @@ namespace NoTrick.Web.Pages.Account {
         public void OnGet(string returnUrl = null) {
             ReturnUrl = returnUrl;
         }
+        public IActionResult OnPostAsync(string returnUrl = null) {
+            
+            returnUrl ??= Url.Content("~/");
+
+            //Return the page if the model is not valid. 
+            if (!ModelState.IsValid) return Page();
+
+            var (passwordHash, passwordSalt) = PasswordHasher.HashPassword(Input.Password);
+            var account = new NoTricks.Data.Models.Account {
+                EMail = Input.Email,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                CreatedAt = DateTime.Now,
+                Status = AccountStatus.PendingVerification
+            };
+            _logger.LogTrace($"Attempting to create account for {account.EMail}");
+
+            if (_accountRepo.IsEmailInUse(account.EMail)) {
+                _logger.LogWarning($"An account with {account.EMail} already exist");
+                ModelState.AddModelError("All", "Email already in use. Please use forgot my password to recover.");
+                return Page();
+            }
+
+            var id = _accountRepo.Insert(account);
+            _logger.LogInformation($"Created account {account.EMail} with ID: {id}");
+            //TODO: Login user once login service is done.
+            return LocalRedirect(returnUrl);
+        }
+        
     }
 }
