@@ -20,12 +20,14 @@ namespace NoTricks.Data.Repositories {
             using (var conn = new MySqlConnection(_connStr)) {
                 conn.Open();
                 var sql = $@"
+                    START TRANSACTION;
                     INSERT INTO Addresses (Id, StreetAddress1, StreetAddress2, ZipCode, City, State)
                     VALUES(
                       @{nameof(Address.Id)}, @{nameof(Address.StreetAddress1)}, @{nameof(Address.StreetAddress2)},
                       @{nameof(Address.ZipCode)}, @{nameof(Address.City)}, @{nameof(Address.State)}
                     );
-                    SELECT @@IDENTITY;    
+                    SELECT @@IDENTITY;   
+                    COMMIT; 
                 ";
                 return conn.Query<int>(sql, model).Single();
             }
@@ -41,7 +43,7 @@ namespace NoTricks.Data.Repositories {
                       StreetAddress2 AS {nameof(Address.StreetAddress2)},
                       ZipCode AS {nameof(Address.ZipCode)},
                       City AS {nameof(Address.City)},
-                      State AS {nameof(Address.State)},
+                      State AS {nameof(Address.State)}
                     FROM Addresses
                     WHERE Id = @Id;
                 ";
@@ -60,8 +62,8 @@ namespace NoTricks.Data.Repositories {
                       StreetAddress2 AS {nameof(Address.StreetAddress2)},
                       ZipCode AS {nameof(Address.ZipCode)},
                       City AS {nameof(Address.City)},
-                      State AS {nameof(Address.State)},
-                    FROM Addresses                   
+                      State AS {nameof(Address.State)}
+                    FROM Addresses;                   
                 ";
 
             return conn.Query<Address>(sql);
@@ -86,9 +88,9 @@ namespace NoTricks.Data.Repositories {
                       StreetAddress2 = @{nameof(Address.StreetAddress2)},
                       ZipCode = @{nameof(Address.ZipCode)},
                       City = @{nameof(Address.City)},
-                      State = @{nameof(Address.State)},
+                      State = @{nameof(Address.State)}
                     WHERE
-                      Id = @{nameof(Address.Id)}
+                      Id = @{nameof(Address.Id)};
                 ";
 
                 return conn.Execute(sql, model) == 1;

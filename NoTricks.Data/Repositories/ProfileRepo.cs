@@ -20,8 +20,8 @@ namespace NoTricks.Data.Repositories {
             conn.Open();
             var sql = $@"
               START TRANSACTION;
-              INSERT INTO Profile(
-              VALUES
+              INSERT INTO Profiles(FirstName, LastName, PreferredName, Phone, Birthday, AddressId, AccountId)
+              VALUES(
                 @{nameof(Profile.FirstName)},@{nameof(Profile.LastName)},@{nameof(Profile.PreferredName)},
                 @{nameof(Profile.Phone)},@{nameof(Profile.Birthday)},@{nameof(Profile.AddressId)},
                 @{nameof(Profile.AccountId)}
@@ -37,16 +37,16 @@ namespace NoTricks.Data.Repositories {
             conn.Open();
             var sql = $@"
               SELECT 
-                Id AS @{nameof(Profile.Id)},
-                FirstName AS @{nameof(Profile.FirstName)},
-                LastName AS @{nameof(Profile.LastName)},
-                PreferredName AS @{nameof(Profile.PreferredName)},
-                Phone AS @{nameof(Profile.Phone)},
-                Birthday AS @{nameof(Profile.Birthday)},
-                AddressId AS @{nameof(Profile.AddressId)},
-                AccountId AS @{nameof(Profile.AccountId)},
-              FROM Profile
-              WHERE Id = @Id
+                Id AS {nameof(Profile.Id)},
+                FirstName AS {nameof(Profile.FirstName)},
+                LastName AS {nameof(Profile.LastName)},
+                PreferredName AS {nameof(Profile.PreferredName)},
+                Phone AS {nameof(Profile.Phone)},
+                Birthday AS {nameof(Profile.Birthday)},
+                AddressId AS {nameof(Profile.AddressId)},
+                AccountId AS {nameof(Profile.AccountId)}
+              FROM Profiles
+              WHERE Id = @Id;
             ";
             return conn.QuerySingleOrDefault<Profile>(sql, new {Id = id});
         }
@@ -56,15 +56,15 @@ namespace NoTricks.Data.Repositories {
             conn.Open();
             var sql = $@"
               SELECT 
-                Id AS @{nameof(Profile.Id)},
-                FirstName AS @{nameof(Profile.FirstName)},
-                LastName AS @{nameof(Profile.LastName)},
-                PreferredName AS @{nameof(Profile.PreferredName)},
-                Phone AS @{nameof(Profile.Phone)},
-                Birthday AS @{nameof(Profile.Birthday)},
-                AddressId AS @{nameof(Profile.AddressId)},
-                AccountId AS @{nameof(Profile.AccountId)},
-              FROM Profile
+                Id AS {nameof(Profile.Id)},
+                FirstName AS {nameof(Profile.FirstName)},
+                LastName AS {nameof(Profile.LastName)},
+                PreferredName AS {nameof(Profile.PreferredName)},
+                Phone AS {nameof(Profile.Phone)},
+                Birthday AS {nameof(Profile.Birthday)},
+                AddressId AS {nameof(Profile.AddressId)},
+                AccountId AS {nameof(Profile.AccountId)}
+              FROM Profiles;
             ";
             return conn.Query<Profile>(sql);
         }
@@ -82,7 +82,7 @@ namespace NoTricks.Data.Repositories {
             using var conn = new MySqlConnection(_connStr);
             conn.Open();
             var sql = $@"
-              UPDATE Profile SET
+              UPDATE Profiles SET
                 FirstName = @{nameof(Profile.FirstName)},
                 LastName = @{nameof(Profile.LastName)},
                 PreferredName = @{nameof(Profile.PreferredName)},
@@ -90,7 +90,7 @@ namespace NoTricks.Data.Repositories {
                 Birthday = @{nameof(Profile.Birthday)},
                 AddressId = @{nameof(Profile.AddressId)},
                 AccountId = @{nameof(Profile.AccountId)}
-              WHERE Id = @{nameof(Profile.Id)}
+              WHERE Id = @{nameof(Profile.Id)};
             ";
             return conn.Execute(sql, model) == 1;
         }

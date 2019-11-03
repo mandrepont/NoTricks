@@ -10,7 +10,7 @@ namespace NoTricks.Data.Models
         public string PreferredName { get; set; }
         public string Phone { get; set; }
         public DateTime? Birthday { get; set; }
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
         public int AccountId { get; set; }
     }
 }
