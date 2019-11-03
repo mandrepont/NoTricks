@@ -74,10 +74,10 @@ namespace NoTricks.Data.Repositories {
             conn.Open();
             var sql = $@"
                 UPDATE Accounts SET
-                  FirstName AS {nameof(Author.FirstName)},
-                  LastName AS {nameof(Author.LastName)},
-                  PenName AS {nameof(Author.PenName)},
-                  Birthday AS {nameof(Author.Birthday)},
+                  FirstName = @{nameof(Author.FirstName)},
+                  LastName = @{nameof(Author.LastName)},
+                  PenName = @{nameof(Author.PenName)},
+                  Birthday = @{nameof(Author.Birthday)},
                 WHERE Id = @{nameof(Author.Id)}
             ";
             return conn.Execute(sql, model) == 1;

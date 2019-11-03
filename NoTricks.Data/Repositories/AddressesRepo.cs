@@ -82,13 +82,13 @@ namespace NoTricks.Data.Repositories {
                 conn.Open();
                 var sql = $@"
                     UPDATE Addresses SET
-                      StreetAddress1 = {nameof(Address.StreetAddress1)},
-                      StreetAddress2 = {nameof(Address.StreetAddress2)},
-                      ZipCode = {nameof(Address.ZipCode)},
-                      City = {nameof(Address.City)},
-                      State = {nameof(Address.State)},
+                      StreetAddress1 = @{nameof(Address.StreetAddress1)},
+                      StreetAddress2 = @{nameof(Address.StreetAddress2)},
+                      ZipCode = @{nameof(Address.ZipCode)},
+                      City = @{nameof(Address.City)},
+                      State = @{nameof(Address.State)},
                     WHERE
-                      Id = {nameof(Address.Id)}
+                      Id = @{nameof(Address.Id)}
                 ";
 
                 return conn.Execute(sql, model) == 1;
