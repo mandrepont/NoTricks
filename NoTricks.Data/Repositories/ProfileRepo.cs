@@ -1,9 +1,17 @@
-﻿using NoTricks.Data.Models;
+﻿using MySql.Data.MySqlClient;
+using NoTricks.Data.Models;
 
 namespace NoTricks.Data.Repositories
 {
     public class ProfileRepo : IRepository<Profile>
     {
+        private readonly string _connStr;
+
+        public ProfileRepo(NoTricksConnectionString connStr)
+        {
+            _connStr = connStr.Value;
+        }
+        
         public int Insert(Profile model)
         {
             throw new System.NotImplementedException();
