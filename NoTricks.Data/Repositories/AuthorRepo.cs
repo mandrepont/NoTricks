@@ -55,8 +55,7 @@ namespace NoTricks.Data.Repositories {
                     LastName AS {nameof(Author.LastName)},
                     PenName AS {nameof(Author.PenName)},
                     Birthday AS {nameof(Author.Birthday)},
-                  FROM Authors
-                  WHERE Id = @Id;
+                  FROM Authors          
             ";
             return conn.Query<Author>(sql);
         }
