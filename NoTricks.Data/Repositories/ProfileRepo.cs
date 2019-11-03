@@ -1,9 +1,12 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System.Collections.Generic;
+using MySql.Data.MySqlClient;
 using NoTricks.Data.Models;
 
 namespace NoTricks.Data.Repositories
 {
-    public class ProfileRepo : IRepository<Profile>
+    public interface IProfileRepo : IRepository<Profile>{}
+    
+    public class ProfileRepo : IProfileRepo
     {
         private readonly string _connStr;
 
@@ -19,6 +22,10 @@ namespace NoTricks.Data.Repositories
 
         public Profile GetById(int id)
         {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<Profile> GetAll() {
             throw new System.NotImplementedException();
         }
 
