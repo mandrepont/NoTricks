@@ -6,13 +6,12 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.0.30" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
       <PackageReference Include="MySql.Data" Version="8.0.18" />
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\3.0.0\ref\netcoreapp3.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      </Reference>
+      <Folder Include="Services" />
     </ItemGroup>
 
 </Project>

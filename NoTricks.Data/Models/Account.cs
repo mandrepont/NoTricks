@@ -15,8 +15,8 @@ namespace NoTricks.Data.Models {
     public enum AccountStatus {
         Disabled,
         Banned,
-        Pending_Verification,
-        Locked_Out,
+        PendingVerification,
+        LockedOut,
         Ok
     }
 }

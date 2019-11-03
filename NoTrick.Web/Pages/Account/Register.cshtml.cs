@@ -47,32 +47,33 @@ namespace NoTrick.Web.Pages.Account {
         public void OnGet(string returnUrl = null) {
             ReturnUrl = returnUrl;
         }
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null) {
+        public IActionResult OnPostAsync(string returnUrl = null) {
             
             returnUrl ??= Url.Content("~/");
 
-            if (ModelState.IsValid) {
-                var passwordHash = PasswordHasher.HashPassword(Input.Password);
-                var account = new NoTricks.Data.Models.Account {
-                    EMail = Input.Email,
-                    PasswordHash = passwordHash.Item1,
-                    PasswordSalt = passwordHash.Item2,
-                    CreatedAt = DateTime.Now,
-                    Status = AccountStatus.Pending_Verification
-                };
-                try {
-                    _accountRepo.Insert(account);
-                    //TODO: SEND EMAIL
-                    return LocalRedirect(returnUrl);
-                }
-                catch (Exception e) {
-                    //TODO: Add better error checking here. 
-                    _logger.LogWarning($"Error when registering user {account.EMail}", e);
-                    ModelState.AddModelError("All", "Error when creating the account. Email in use.");
-                }
+            //Return the page if the model is not valid. 
+            if (!ModelState.IsValid) return Page();
+
+            var (passwordHash, passwordSalt) = PasswordHasher.HashPassword(Input.Password);
+            var account = new NoTricks.Data.Models.Account {
+                EMail = Input.Email,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                CreatedAt = DateTime.Now,
+                Status = AccountStatus.PendingVerification
+            };
+            _logger.LogTrace($"Attempting to create account for {account.EMail}");
+
+            if (_accountRepo.IsEmailInUse(account.EMail)) {
+                _logger.LogWarning($"An account with {account.EMail} already exist");
+                ModelState.AddModelError("All", "Email already in use. Please use forgot my password to recover.");
+                return Page();
             }
 
-            return Page();
+            var id = _accountRepo.Insert(account);
+            _logger.LogInformation($"Created account {account.EMail} with ID: {id}");
+            //TODO: Login user once login service is done.
+            return LocalRedirect(returnUrl);
         }
         
     }
