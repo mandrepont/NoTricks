@@ -14,6 +14,9 @@ namespace NoTricks.Data.Repositories {
         }
         
         public bool Insert(RoleMapping model) {
+            //Do not insert existing mapping, it thorws exceptions. 
+            if (Exist(model)) return false;
+            
             using var conn = new MySqlConnection(_connStr);
             conn.Open();
             var sql = $@"
