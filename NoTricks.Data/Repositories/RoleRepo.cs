@@ -36,7 +36,7 @@ namespace NoTricks.Data.Repositories {
                  Name AS {nameof(Role.Name)},
                  Description AS {nameof(Role.Description)}
                FROM Roles
-               WHERE Id = @Id
+               WHERE Id = @Id;
             ";
             return conn.QuerySingleOrDefault<Role>(sql, new {Id = id});
         }
@@ -49,7 +49,7 @@ namespace NoTricks.Data.Repositories {
                  Id AS {nameof(Role.Id)},
                  Name AS {nameof(Role.Name)},
                  Description AS {nameof(Role.Description)}
-               FROM Roles
+               FROM Roles;
             ";
             return conn.Query<Role>(sql);
         }
@@ -70,7 +70,7 @@ namespace NoTricks.Data.Repositories {
               UPDATE Roles SET
                 Name = @{nameof(Role.Name)},
                 Description = @{nameof(Role.Description)}
-              WHERE Id = @{nameof(Role.Id)}
+              WHERE Id = @{nameof(Role.Id)};
             ";
             return conn.Execute(sql, model) == 1;
         }
