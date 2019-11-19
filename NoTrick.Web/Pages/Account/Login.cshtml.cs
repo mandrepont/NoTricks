@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -81,6 +82,7 @@ namespace NoTrick.Web.Pages.Account {
                         ModelState.AddModelError(string.Empty, "Your account is pending verification.");
                         return Page();
                     case AccountStatus.Ok:
+                        await _signInService.SignInAsync(Input.Email, Input.RememberMe, HttpContext);
                         return LocalRedirect(returnUrl);
                 }
             }
@@ -88,6 +90,11 @@ namespace NoTrick.Web.Pages.Account {
             // If we got this far, something failed, redisplay form
             ModelState.AddModelError(string.Empty, "An unexpected error occured.");
             return Page();
+        }
+
+        public async Task<IActionResult> OnGetLogoutAsync() {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return LocalRedirect(Url.Content("~/"));
         }
 
         
