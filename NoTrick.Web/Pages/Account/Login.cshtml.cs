@@ -5,16 +5,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using NoTrick.Web.Services;
+using NoTricks.Data.Models;
+using NoTricks.Data.Repositories;
 
 namespace NoTrick.Web.Pages.Account {
     [AllowAnonymous]
     public class LoginModel : PageModel {
         private readonly ILogger<LoginModel> _logger;
+        private readonly IAccountRepo _account;
+        private readonly SignInService _signInService;
 
-        public LoginModel(ILogger<LoginModel> logger) {
+        public LoginModel(ILogger<LoginModel> logger, IAccountRepo account, SignInService signInService) {
             _logger = logger;
+            _account = account;
+            _signInService = signInService;
         }
 
         [BindProperty] public InputModel Input { get; set; }
@@ -33,6 +41,7 @@ namespace NoTrick.Web.Pages.Account {
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")] public bool RememberMe { get; set; }
+            
         }
 
         public async Task OnGetAsync(string returnUrl = null) {
@@ -55,14 +64,33 @@ namespace NoTrick.Web.Pages.Account {
             if (ModelState.IsValid) {
                 //Need to check account.
                 //if (result is invalid)
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return Page();
+                switch (_signInService.CheckAccount(Input.Email, Input.Password)) {
+                    case AccountStatus.Banned:
+                        ModelState.AddModelError(string.Empty, "Your account has been banned.");
+                        return Page();
+                    case AccountStatus.Disabled:
+                        ModelState.AddModelError(string.Empty, "Your account has been disabled.");
+                        return Page();
+                    case AccountStatus.Unauthenticated:
+                        ModelState.AddModelError(string.Empty, "Invalid credentials.");
+                        return Page();
+                    case AccountStatus.LockedOut:
+                        ModelState.AddModelError(string.Empty, "Account locked.");
+                        return Page();
+                    case AccountStatus.PendingVerification:
+                        ModelState.AddModelError(string.Empty, "Your account is pending verification.");
+                        return Page();
+                    case AccountStatus.Ok:
+                        return LocalRedirect(returnUrl);
+                }
             }
 
             // If we got this far, something failed, redisplay form
+            ModelState.AddModelError(string.Empty, "An unexpected error occured.");
             return Page();
         }
 
+        
     }
 
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NoTrick.Web.Services;
 
 namespace NoTrick.Web {
     public class Startup {
@@ -24,6 +25,7 @@ namespace NoTrick.Web {
             
             services.AddHealthChecks();
             services.AddNoTricksDataServices(Configuration.GetConnectionString("NoTricks"));
+            services.AddSingleton<SignInService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

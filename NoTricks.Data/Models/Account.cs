@@ -17,6 +17,7 @@ namespace NoTricks.Data.Models {
         Banned,
         PendingVerification,
         LockedOut,
-        Ok
+        Ok,
+        Unauthenticated
     }
 }
