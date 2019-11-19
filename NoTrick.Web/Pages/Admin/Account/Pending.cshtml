@@ -10,7 +10,7 @@
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Accounts</a></li>
+          <li class="breadcrumb-item"><a asp-page="/Admin/Account/Index">Accounts</a></li>
           <li class="breadcrumb-item active">Pending</li>
         </ol>
       </div><!-- /.col -->
@@ -44,8 +44,8 @@
                  </td>
                  <td>
                    <div class="d-flex flex-row flex-wrap">
-                     <a class="btn btn-success m-1" asp-page="Pending" asp-page-handler="UpdateStatus" asp-route-id="@account.Id" asp-route-approve="true">Approve</a>
-                     <a class="btn btn-danger m-1" asp-page="Pending" asp-page-handler="UpdateStatus" asp-route-id="@account.Id" asp-route-approve="false">Reject</a>
+                     <a class="btn btn-outline-success m-1" asp-page="Pending" asp-page-handler="UpdateStatus" asp-route-id="@account.Id" asp-route-approve="true">Approve</a>
+                     <a class="btn btn-outline-danger m-1" asp-page="Pending" asp-page-handler="UpdateStatus" asp-route-id="@account.Id" asp-route-approve="false">Reject</a>
                    </div>
                  </td>
                </tr>
