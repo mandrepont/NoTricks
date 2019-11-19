@@ -49,6 +49,8 @@ namespace NoTrick.Web.Services {
                 new ClaimsPrincipal(claimsIdentity), 
                 authProperties);
             
+            account.LastLoginAt = DateTime.Now;
+            _accountRepo.Update(account);
         }
     }
 }
