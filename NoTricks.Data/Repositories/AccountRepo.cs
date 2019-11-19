@@ -9,6 +9,7 @@ namespace NoTricks.Data.Repositories {
     public interface IAccountRepo : IRepository<Account> {
         Account GetByEmail(string email);
         bool IsEmailInUse(string email);
+        IEnumerable<Account> GetPending();
     }
     
     public class AccountRepo : IAccountRepo {
@@ -54,9 +55,9 @@ namespace NoTricks.Data.Repositories {
         }
         
         public IEnumerable<Account> GetAll() {
-            using (var conn = new MySqlConnection(_connStr)) {
-                conn.Open();
-                var sql = $@"
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
                     SELECT 
                       Id AS {nameof(Account.Id)},
                       Email AS {nameof(Account.EMail)},
@@ -68,8 +69,7 @@ namespace NoTricks.Data.Repositories {
                       LastModifiedAt AS {nameof(Account.LastModifiedAt)}
                     FROM Accounts               
                 ";
-                return conn.Query<Account>(sql);
-            }
+            return conn.Query<Account>(sql);
         }
 
         public Account GetByEmail(string email) {
@@ -100,6 +100,25 @@ namespace NoTricks.Data.Repositories {
                 WHERE Email = @Email;
             ";
             return conn.ExecuteScalar<bool>(sql, new {Email = email});
+        }
+
+        public IEnumerable<Account> GetPending() {
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                SELECT 
+                    Id AS {nameof(Account.Id)},
+                    Email AS {nameof(Account.EMail)},
+                    PasswordHash AS {nameof(Account.PasswordHash)},
+                    PasswordSalt AS {nameof(Account.PasswordSalt)},
+                    Status AS {nameof(Account.Status)},
+                    CreatedAt AS {nameof(Account.CreatedAt)},
+                    LastLoginAt AS {nameof(Account.LastLoginAt)},
+                    LastModifiedAt AS {nameof(Account.LastModifiedAt)}
+                FROM Accounts
+                WHERE Status = @Status              
+            ";
+            return conn.Query<Account>(sql, new {Status = AccountStatus.PendingVerification});
         }
 
         public bool Remove(int id) {
