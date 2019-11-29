@@ -75,7 +75,7 @@ namespace NoTricks.Data.Repositories {
             using var conn = new MySqlConnection(_connStr);
             conn.Open();
             var sql = $@"
-                UPDATE Accounts SET
+                UPDATE Authors SET
                   FirstName = @{nameof(Author.FirstName)},
                   LastName = @{nameof(Author.LastName)},
                   PenName = @{nameof(Author.PenName)},
