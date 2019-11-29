@@ -21,9 +21,9 @@ namespace NoTricks.Data.Repositories {
                 conn.Open();
                 var sql = $@"
                     START TRANSACTION;
-                    INSERT INTO Addresses (Id, StreetAddress1, StreetAddress2, ZipCode, City, State)
+                    INSERT INTO Addresses (StreetAddress1, StreetAddress2, ZipCode, City, State)
                     VALUES(
-                      @{nameof(Address.Id)}, @{nameof(Address.StreetAddress1)}, @{nameof(Address.StreetAddress2)},
+                      @{nameof(Address.StreetAddress1)}, @{nameof(Address.StreetAddress2)},
                       @{nameof(Address.ZipCode)}, @{nameof(Address.City)}, @{nameof(Address.State)}
                     );
                     SELECT @@IDENTITY;   
