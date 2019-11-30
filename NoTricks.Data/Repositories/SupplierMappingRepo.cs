@@ -4,7 +4,9 @@ using MySql.Data.MySqlClient;
 using NoTricks.Data.Models;
 
 namespace NoTricks.Data.Repositories {
-    public interface ISupplierMappingRepo : IMappingRepository<SupplierMapping> { }
+    public interface ISupplierMappingRepo : IMappingRepository<SupplierMapping> {
+        IEnumerable<SupplierManager> GetSupplierManager(int SupplierId);
+    }
     
     public class SupplierMappingRepo : ISupplierMappingRepo {
         private readonly string _connStr;
@@ -60,5 +62,21 @@ namespace NoTricks.Data.Repositories {
             return conn.Query<SupplierMapping>(sql);
         }
 
+        public IEnumerable<SupplierManager> GetSupplierManager(int SupplierId) {
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                SELECT
+                    Id AS {nameof(SupplierManager.ProfileId)},
+                    Profiles.AccountId AS {nameof(SupplierManager.AccountId)},
+                    FirstName AS {nameof(SupplierManager.FirstName)},
+                    LastName AS {nameof(SupplierManager.LastName)},
+                    PreferredName AS {nameof(SupplierManager.PreferredName)}
+                FROM SupplierMappings
+                JOIN Profiles ON Profiles.AccountId = SupplierMappings.AccountId
+                WHERE SupplierId = @SupplierId
+            ";
+            return conn.Query<SupplierManager>(sql, new {SupplierId});
+        }
     }
 }
