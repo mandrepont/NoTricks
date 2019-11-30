@@ -9,7 +9,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Supplier Page</h1>
+        <h1 class="m-0 text-dark">Suppliers</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
@@ -27,6 +27,9 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
+        <div class="d-flex flex-row flex-wrap">
+          <a class="btn btn-outline-success m-1" asp-page="Edit"><i class="fas fa-plus"></i></a>
+        </div>
         <table class="table table-borderless">
           <tr>
             <th>Supplier Id</th>
@@ -47,13 +50,13 @@
               </td>
               <td>
                 <div class="d-flex flex-row flex-wrap">
-                  <a class="btn btn-outline-success m-1" asp-page="Pending" asp-page-handler="UpdateStatus" asp-route-id="@supplier.Id" asp-route-approve="true">Edit</a>
-                  <a class="btn btn-outline-danger m-1" asp-page="Pending" asp-page-handler="UpdateStatus" asp-route-id="@supplier.Id" asp-route-approve="false">Remove</a>
+                  <a class="btn btn-outline-success m-1" asp-page="Edit" asp-route-id="@supplier.Id">Edit</a>
+                  <a class="btn btn-outline-danger m-1" asp-page="Index" asp-page-handler="Remove" asp-route-id="@supplier.Id">Remove</a>
                 </div>
               </td>
             </tr>
           }
-          </table> 
+        </table>
       </div>
     </div>
   </div>

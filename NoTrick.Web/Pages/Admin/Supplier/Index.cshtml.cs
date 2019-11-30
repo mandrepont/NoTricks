@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NoTricks.Data.Repositories;
 
@@ -13,6 +14,12 @@ namespace NoTrick.Web.Pages.Admin.Supplier {
         
         public void OnGet() {
             Suppliers = _supplierRepo.GetAll();
+        }
+
+        public IActionResult OnGetRemove(int id) {
+            //TODO: Handle false case
+            _supplierRepo.Remove(id);
+            return RedirectToPage();
         }
     }
 }
