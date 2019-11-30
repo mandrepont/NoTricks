@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -100,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
           with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a asp-page="/Admin/Index" class="nav-link">
+            <a  asp-active-pages="/Admin/Index" asp-active-exact asp-page="/Admin/Index" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Home
@@ -109,7 +109,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item has-treeview menu-open">
-            <a href="#" class="nav-link">
+            <a asp-active-pages="/Admin/Account" href="#" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 Account Management
@@ -118,13 +118,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a asp-page="/Admin/Account/Index" class="nav-link">
+                <a asp-active-pages="/Admin/Account/Index" asp-active-exact asp-page="/Admin/Account/Index" class="nav-link">
                   <i class="fas fa-user-edit nav-icon"></i>
                   <p>Accounts</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a asp-page="/Admin/Account/Pending" class="nav-link">
+                <a asp-active-pages="/Admin/Account/Pending" asp-active-exact asp-page="/Admin/Account/Pending" class="nav-link">
                   <i class="fas fa-user-clock nav-icon"></i>
                   <p>Pending Accounts</p>
                 </a>
@@ -134,10 +134,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
           with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a asp-page="/Admin/Supplier/Index" class="nav-link">
+            <a asp-active-pages="/Admin/Supplier" asp-page="/Admin/Supplier/Index" class="nav-link">
               <i class="nav-icon fab fa-accessible-icon"></i>
               <p>
-                Home
+                Suppliers
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
