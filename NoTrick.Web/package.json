@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "admin-lte": "^3.0.0",
-    "node-sass": "4.12.0"
+    "chart.js": "^2.9.3",
+    "node-sass": "4.12.0",
+    "requirejs": "^2.3.6"
   }
 }
