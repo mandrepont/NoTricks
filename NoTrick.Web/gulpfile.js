@@ -19,6 +19,7 @@ function processDashboardBundle() {
             './node_modules/admin-lte/plugins/jquery/jquery.min.js',
             './node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js',
             './node_modules/admin-lte/dist/js/adminlte.min.js',
+            './node_modules/chart.js/dist/chart.js'
         ])
         .pipe(concat('bundle.min.js'))
         .pipe(uglify())
@@ -30,6 +31,7 @@ function processDashboardStyles() {
         .src([
             './node_modules/admin-lte/dist/css/adminlte.min.css',
             './node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css',
+            './node_modules/chart.js/dist/Chart.css'
         ])
         .pipe(minifyCSS())
         .pipe(concat('bundle.min.css'))
