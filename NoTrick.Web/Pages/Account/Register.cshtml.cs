@@ -84,7 +84,7 @@ namespace NoTrick.Web.Pages.Account {
                 EMail = Input.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
                 Status = AccountStatus.PendingVerification
             };
             _logger.LogTrace($"Attempting to create account for {account.EMail}");

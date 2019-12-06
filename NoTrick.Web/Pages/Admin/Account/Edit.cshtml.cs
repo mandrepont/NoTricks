@@ -129,7 +129,7 @@ namespace NoTrick.Web.Pages.Admin.Account {
             var (passwordHash, passwordSalt) = PasswordHasher.HashPassword(SecurityInput.Password);
             Account.PasswordHash = passwordHash;
             Account.PasswordSalt = passwordSalt;
-            Account.LastModifiedAt = DateTime.Now;
+            Account.LastModifiedAt = DateTime.UtcNow;
             _accountRepo.Update(Account);
             
             //TODO: Add success message
@@ -143,7 +143,7 @@ namespace NoTrick.Web.Pages.Admin.Account {
 
             Account.EMail = Input.Email;
             Account.Status = Input.Status;
-            Account.LastModifiedAt = DateTime.Now;
+            Account.LastModifiedAt = DateTime.UtcNow;
             
             Profile.Birthday = Input.DateOfBirth;
             Profile.Phone = Input.Phone;
