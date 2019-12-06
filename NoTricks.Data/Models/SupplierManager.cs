@@ -8,8 +8,10 @@ namespace NoTricks.Data.Models {
         public string LastName { get; }
         public string PreferredName { get; }
 
-        public string PreferredFirstLastName => String.IsNullOrWhiteSpace(PreferredName)
-            ? $"{FirstName} {LastName}"
-            : $"{PreferredName} {LastName}";
+        public string PreferredOrFirstName => string.IsNullOrWhiteSpace(PreferredName) ? FirstName : PreferredName; 
+        
+        public string PreferredFirstLastName => $"{PreferredOrFirstName} {LastName}";
+        
+        public string PreferredLastFirstName => $"{LastName}, {PreferredOrFirstName}";
     }
 }

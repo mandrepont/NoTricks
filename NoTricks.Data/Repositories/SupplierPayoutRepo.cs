@@ -5,7 +5,9 @@ using Dapper;
 using NoTricks.Data.Models;
 
 namespace NoTricks.Data.Repositories {
-    public interface ISupplierPayoutRepo : IRepository<SupplierPayout> {}
+    public interface ISupplierPayoutRepo : IRepository<SupplierPayout> {
+        IEnumerable<ExtraSupplierPayout> GetAllExtra();
+    }
 
     public class SupplierPayoutRepo : ISupplierPayoutRepo {
         private readonly string _connStr;
@@ -59,6 +61,27 @@ namespace NoTricks.Data.Repositories {
               FROM SupplierPayouts
             ";
             return conn.Query<SupplierPayout>(sql);
+        }
+        
+        public IEnumerable<ExtraSupplierPayout> GetAllExtra() {
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+              SELECT 
+                SupplierPayouts.Id AS {nameof(SupplierPayout.Id)},
+                Amount AS {nameof(SupplierPayout.Amount)},
+                PayedAt AS {nameof(SupplierPayout.PayedAt)},
+                SupplierId AS {nameof(SupplierPayout.SupplierId)},
+                StaffId AS {nameof(SupplierPayout.StaffId)},
+                FirstName AS {nameof(ExtraSupplierPayout.StaffFirstName)},
+                LastName AS {nameof(ExtraSupplierPayout.StaffLastName)},
+                PreferredName AS {nameof(ExtraSupplierPayout.StaffPreferredName)},
+                CompanyName AS {nameof(ExtraSupplierPayout.SupplierName)}
+              FROM SupplierPayouts
+              JOIN Profiles ON AccountId = StaffId
+              JOIN Suppliers ON Suppliers.Id = SupplierId
+            ";
+            return conn.Query<ExtraSupplierPayout>(sql);
         }
 
         public bool Remove(int id) {
