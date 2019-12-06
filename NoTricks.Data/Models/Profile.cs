@@ -12,5 +12,9 @@ namespace NoTricks.Data.Models
         public DateTime? Birthday { get; set; }
         public int? AddressId { get; set; }
         public int AccountId { get; set; }
+        
+        public string PreferredFirstLastName => string.IsNullOrWhiteSpace(PreferredName)
+            ? $"{FirstName} {LastName}"
+            : $"{PreferredName} {LastName}";
     }
 }

@@ -18,6 +18,7 @@ function processDashboardBundle() {
         .src([
             './node_modules/admin-lte/plugins/jquery/jquery.min.js',
             './node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js',
+            './node_modules/admin-lte/plugins/inputmask/min/jquery.inputmask.bundle.min.js',
             './node_modules/admin-lte/dist/js/adminlte.min.js',
             './node_modules/chart.js/dist/chart.js'
         ])

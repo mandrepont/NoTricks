@@ -6,6 +6,7 @@ using NoTricks.Data.Models;
 
 namespace NoTricks.Data.Repositories {
     public interface IProfileRepo : IRepository<Profile> {
+        Profile GetByAccountId(int accountId);
     }
 
     public class ProfileRepo : IProfileRepo {
@@ -93,6 +94,25 @@ namespace NoTricks.Data.Repositories {
               WHERE Id = @{nameof(Profile.Id)};
             ";
             return conn.Execute(sql, model) == 1;
+        }
+
+        public Profile GetByAccountId(int accountId) {
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+              SELECT 
+                Id AS {nameof(Profile.Id)},
+                FirstName AS {nameof(Profile.FirstName)},
+                LastName AS {nameof(Profile.LastName)},
+                PreferredName AS {nameof(Profile.PreferredName)},
+                Phone AS {nameof(Profile.Phone)},
+                Birthday AS {nameof(Profile.Birthday)},
+                AddressId AS {nameof(Profile.AddressId)},
+                AccountId AS {nameof(Profile.AccountId)}
+              FROM Profiles
+              WHERE AccountId = @accountId;
+            ";
+            return conn.QuerySingleOrDefault<Profile>(sql, new {accountId});
         }
     }
 }
