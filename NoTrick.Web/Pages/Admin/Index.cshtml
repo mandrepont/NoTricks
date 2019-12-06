@@ -24,6 +24,64 @@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-md-3">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.Counts.PendingAccounts</h3>
+                        <p>Pending Accounts</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <a asp-page="/Admin/Account/Pending" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.Counts.Accounts</h3>
+                        <p>Accounts</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a asp-page="/Admin/Account/Index" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.Counts.Suppliers</h3>
+                        <p>Suppliers</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-parachute-box"></i>
+                    </div>
+                    <a asp-page="/Admin/Supplier/Index" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="small-box bg-gradient-primary">
+                    <div class="inner">
+                        <h3>@Model.Counts.Products</h3>
+                        <p>Products</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-6">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -36,7 +94,11 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div></div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div></div></div>
                         <canvas id="accountStatusDoughnut" style="height: 230px; min-height: 230px; display: block; width: 764px;" width="764" height="230" class="chartjs-render-monitor"></canvas>
                     </div>
                     <!-- /.card-body -->
@@ -44,7 +106,7 @@
             </div>
             <div class="col-lg-6">
 
-            
+
                 <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h3 class="card-title">Accounts Created in the Past Seven Days</h3>
@@ -56,7 +118,11 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div></div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div></div></div>
                         <canvas id="accountCreatedCountLine" style="height: 230px; min-height: 230px; display: block; width: 764px;" width="764" height="230" class="chartjs-render-monitor"></canvas>
                     </div>
                     <!-- /.card-body -->
@@ -65,7 +131,6 @@
         </div>
 
     </div>
-
 </div>
 
 

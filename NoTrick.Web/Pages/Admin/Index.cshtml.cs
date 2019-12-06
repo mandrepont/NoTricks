@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ChartJSCore.Helpers;
 using NoTricks.Data.Models;
+using NoTricks.Data.Models.Report;
 using NoTricks.Data.Repositories;
 
 namespace NoTrick.Web.Pages.Admin {
@@ -14,6 +15,7 @@ namespace NoTrick.Web.Pages.Admin {
         private readonly IReportRepo _reportRepo;
         public Chart AccountStatusChart { get; set; }
         public Chart AccountCreatedCountChart { get; set; }
+        public Counts Counts { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger, IReportRepo reportRepo) {
             _logger = logger;
@@ -23,6 +25,7 @@ namespace NoTrick.Web.Pages.Admin {
         public void OnGet() {
             AccountStatusChart = GetAccountStatusChart();
             AccountCreatedCountChart = GetAccountCreatedChart();
+            Counts = _reportRepo.GetCounts();
         }
 
         public Chart GetAccountCreatedChart() {
