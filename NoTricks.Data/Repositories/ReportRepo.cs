@@ -63,12 +63,12 @@ namespace NoTricks.Data.Repositories {
             conn.Open();
             var sql = $@"
                 SELECT 
-                  (SELECT COUNT(*) FROM Accounts WHERE Status = @status) AS {nameof(Counts.PendingAccounts)},
+                  (SELECT SUM(Balance) FROM Suppliers) AS {nameof(Counts.PendingPayoutSum)},
                   (SELECT COUNT(*) FROM Accounts) AS {nameof(Counts.Accounts)},
                   (SELECT COUNT(*) FROM Suppliers) AS {nameof(Counts.Suppliers)},
-                  (122) AS {nameof(Counts.Products)}
+                  (SELECT SUM(Amount) FROM SupplierPayouts) AS {nameof(Counts.PayoutSum)}
             ";
-            return conn.QuerySingle<Counts>(sql, new {status = AccountStatus.PendingVerification});
+            return conn.QuerySingle<Counts>(sql);
         }
     }
 }
