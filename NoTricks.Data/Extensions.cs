@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection {
             services.AddSingleton<ISupplierMappingRepo, SupplierMappingRepo>();
             services.AddSingleton<IReportRepo, ReportRepo>();
             services.AddSingleton<IProfileRepo, ProfileRepo>();
-            
+            services.AddSingleton<IRoleRepo, RoleRepo>();
             return services;
         }
     }
