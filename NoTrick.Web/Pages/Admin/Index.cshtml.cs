@@ -15,6 +15,8 @@ namespace NoTrick.Web.Pages.Admin {
         private readonly IReportRepo _reportRepo;
         public Chart AccountStatusChart { get; set; }
         public Chart AccountCreatedCountChart { get; set; }
+        public Chart SupplierPayoutCountChart { get; set; }
+        public Chart SupplierPayoutSumChart  { get; set; }
         public Counts Counts { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger, IReportRepo reportRepo) {
@@ -25,10 +27,12 @@ namespace NoTrick.Web.Pages.Admin {
         public void OnGet() {
             AccountStatusChart = GetAccountStatusChart();
             AccountCreatedCountChart = GetAccountCreatedChart();
+            SupplierPayoutSumChart = GetSupplierPayoutSumChart();
+            SupplierPayoutCountChart = GetSupplierPayoutCountChart();
             Counts = _reportRepo.GetCounts();
         }
 
-        public Chart GetAccountCreatedChart() {
+        private Chart GetAccountCreatedChart() {
             _logger.LogTrace("Generating chart for account created over the past 7 days.");
             var accountCreatedData = _reportRepo.GetAccountCreatedCount(DateTime.Today.AddDays(-8), DateTime.Today.AddDays(1)).OrderBy(x => x.CreatedDate).ToList();
             return new Chart {
@@ -60,8 +64,60 @@ namespace NoTrick.Web.Pages.Admin {
                 }
             };
         }
+        
+        private Chart GetSupplierPayoutSumChart() {
+            _logger.LogTrace("Generating chart for total supplier payout over the past 30 days.");
+            var supplierPayoutSumData = _reportRepo.GetSupplierPayoutSums(DateTime.Today.AddMonths(-1).AddDays(-1), DateTime.Today.AddDays(1)).OrderBy(x => x.PayedAt).ToList();
+            return new Chart {
+                Type = Enums.ChartType.Line,
+                Data = new Data {
+                    Labels = supplierPayoutSumData.Select(x => x.PayedAt.ToShortDateString()).ToList(),
+                    Datasets = new List<Dataset> {
+                        new LineDataset {
+                            Label = "$ Total Payouts",
+                            Data = supplierPayoutSumData.Select(x => (double) x.Sum).ToList(),
+                            Fill = "false",
+                            LineTension = 0.1,
+                            BackgroundColor = ChartColor.FromRgba(40, 167, 69, 0.4),
+                            BorderColor = ChartColor.FromRgba(40,167,69,1),
+                            BorderCapStyle = "butt",
+                            BorderDashOffset = 0.0,
+                            BorderJoinStyle = "miter",
+                            PointBorderColor = new List<ChartColor>() { ChartColor.FromRgba(40,167,69,1) },
+                            PointBackgroundColor = new List<ChartColor>() { ChartColor.FromHexString("#fff") },
+                            PointBorderWidth = new List<int> { 1 },
+                            PointHoverRadius = new List<int> { 5 },
+                            PointHoverBackgroundColor = new List<ChartColor>() { ChartColor.FromRgba(40,167,69,1) },
+                            PointHoverBorderColor = new List<ChartColor>() { ChartColor.FromRgba(40,220,220,1) },
+                            PointHoverBorderWidth = new List<int> { 2 },
+                            PointRadius = new List<int> { 1 },
+                            PointHitRadius = new List<int> { 10 },
+                        }
+                    }
+                }
+            };
+        }
+        
+        private Chart GetSupplierPayoutCountChart() {
+            _logger.LogTrace("Generating chart for total number of supplier payout over the past 30 days.");
+            var payoutCountData = _reportRepo.GetSupplierPayoutCounts(DateTime.Today.AddMonths(-1).AddDays(-1), DateTime.Today.AddDays(1)).OrderBy(x => x.PayedAt).ToList();
+            return new Chart {
+                Type = Enums.ChartType.Bar,
+                Data = new Data {
+                    Labels = payoutCountData.Select(x => x.PayedAt.ToShortDateString()).ToList(),
+                    Datasets = new List<Dataset> {
+                        new BarDataset {
+                            Label = "Total Number Of Payouts",
+                            Data = payoutCountData.Select(x => (double) x.Count).ToList(),
+                            BackgroundColor = new List<ChartColor>{ ChartColor.FromHexString("#007bff") },
+                            HoverBackgroundColor = new List<ChartColor>{ ChartColor.FromHexString("#007bff") },
+                        }
+                    }
+                },
+            };
+        }
 
-        public Chart GetAccountStatusChart() {
+        private Chart GetAccountStatusChart() {
             _logger.LogTrace("Generating chart for account in each status.");
             var colorMapping = new Dictionary<AccountStatus, ChartColor> {
                 {AccountStatus.Banned, ChartColor.FromHexString("#dc3545") },
