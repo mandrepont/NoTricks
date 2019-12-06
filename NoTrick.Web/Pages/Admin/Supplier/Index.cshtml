@@ -38,14 +38,14 @@
           </tr>
           @foreach (var supplier in Model.Suppliers) {
             <tr>
-              <td class="AccountId">
+              <td class="SupplierId">
                 <span>@supplier.Id</span>
               </td>
-              <td class="EMail">
+              <td class="CompanyName">
                 <span>@supplier.CompanyName</span>
               </td>
-              <td class="CreatedAt">
-                <span>@supplier.Balance</span>
+              <td class="Balance">
+                <span>$@supplier.Balance</span>
               </td>
               <td>
                 <div class="d-flex flex-row flex-wrap">

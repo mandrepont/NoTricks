@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>AdminLTE 3 | Starter</title>
+  <title>@ViewData["Title"] - NoTrick</title>
 
   <!-- Bundled style -->
   <link rel="stylesheet" href="~/dist/css/bundle.min.css" asp-append-version="true">
@@ -90,7 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <img src="~/images/person.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Michael Andrepont</a>
+          <a href="#" class="d-block">@User.Identity.Name</a>
         </div>
       </div>
 
@@ -117,18 +117,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a asp-active-pages="/Admin/Account/Index" asp-active-exact asp-page="/Admin/Account/Index" class="nav-link">
-                  <i class="fas fa-user-edit nav-icon"></i>
-                  <p>Accounts</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a asp-active-pages="/Admin/Account/Pending" asp-active-exact asp-page="/Admin/Account/Pending" class="nav-link">
-                  <i class="fas fa-user-clock nav-icon"></i>
-                  <p>Pending Accounts</p>
-                </a>
-              </li>
+                <li class="nav-item">
+                    <a asp-active-pages="/Admin/Account/Index" asp-active-exact asp-page="/Admin/Account/Index" class="nav-link">
+                        <i class="fas fa-user-edit nav-icon"></i>
+                        <p>Accounts</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-active-pages="/Admin/Account/Pending" asp-active-exact asp-page="/Admin/Account/Pending" class="nav-link">
+                        <i class="fas fa-user-clock nav-icon"></i>
+                        <p>Pending Accounts</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-active-pages="/Admin/Account/Roles" asp-active-exact asp-page="/Admin/Account/Roles" class="nav-link">
+                        <i class="fas fa-user-shield nav-icon"></i>
+                        <p>Roles</p>
+                    </a>
+                </li>
             </ul>
           </li>
           <!-- Add icons to the links using the .nav-icon class

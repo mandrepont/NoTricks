@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,11 +18,17 @@ namespace NoTrick.Web {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddRazorPages(options => {
-                options.Conventions.AuthorizeFolder("/Admin");
-                options.Conventions.AuthorizeFolder("/Supplier");
+                options.Conventions.AuthorizeFolder("/Admin", "IsAdmin");
+                options.Conventions.AuthorizeFolder("/Supplier", "IsSupplier");
             });
-            
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddAuthorization(options => {
+                options.AddPolicy("IsAdmin",
+                    policy => { policy.Requirements.Add(new RolesAuthorizationRequirement(new[] {"Admin"})); });
+                options.AddPolicy("IsSupplier",
+                    policy => { policy.Requirements.Add(new RolesAuthorizationRequirement(new[] {"Supplier"})); });
+            });
             
             services.AddHealthChecks();
             services.AddNoTricksDataServices(Configuration.GetConnectionString("NoTricks"));

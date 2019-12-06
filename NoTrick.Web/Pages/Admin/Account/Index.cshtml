@@ -10,7 +10,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active"></li>
+                    <li class="breadcrumb-item active">Accounts</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -28,8 +28,8 @@
                         <th>Account Id</th>
                         <th>EMail</th>
                         <th>Created At</th>
-                        <th>Last Login At</th>
-                        <th>Last Modified At</th>
+                        <th>Last Login At (UTC)</th>
+                        <th>Last Modified At (UTC)</th>
                         <th>Actions</th>
                     </tr>
                     @foreach (var account in Model.Accounts) {
@@ -51,7 +51,7 @@
                             </td>
                             <td>
                                 <div class="d-flex flex-row flex-wrap">
-                                    <a class="btn btn-outline-info m-1" href="#">Edit</a>
+                                    <a class="btn btn-outline-info m-1" asp-page="Edit" asp-route-id="@account.Id">Edit</a>
                                     <a class="btn btn-outline-danger m-1" href="#">Disable</a>
                                 </div>
                             </td>

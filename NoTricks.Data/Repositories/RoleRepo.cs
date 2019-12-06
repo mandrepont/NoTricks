@@ -5,7 +5,9 @@ using MySql.Data.MySqlClient;
 using NoTricks.Data.Models;
 
 namespace NoTricks.Data.Repositories {
-    public interface IRoleRepo : IRepository<Role> { }
+    public interface IRoleRepo : IRepository<Role> {
+        IEnumerable<Role> GetAllFormAccountId(int accountId);
+    }
     
     public class RoleRepo : IRoleRepo {
         private readonly string _connStr;
@@ -73,6 +75,21 @@ namespace NoTricks.Data.Repositories {
               WHERE Id = @{nameof(Role.Id)};
             ";
             return conn.Execute(sql, model) == 1;
+        }
+
+        public IEnumerable<Role> GetAllFormAccountId(int accountId) {
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                SELECT 
+                  Id AS {nameof(Role.Id)},
+                  Name AS {nameof(Role.Name)},
+                  Description AS {nameof(Role.Description)}
+                FROM RoleMappings
+                JOIN Roles ON Id = RoleId
+                WHERE AccountId = @accountId
+            ";
+            return conn.Query<Role>(sql, new {accountId});
         }
     }
 }
