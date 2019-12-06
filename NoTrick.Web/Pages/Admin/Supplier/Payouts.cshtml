@@ -1,0 +1,103 @@
+﻿@page
+@model PayoutsModel
+@{
+    ViewData["Title"] = "Supplier Payouts";
+}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item">
+            <a asp-page="/Admin/Supplier/Index">Suppliers</a>
+          </li>
+          <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+    <!-- Main content -->
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Pending Payouts</h3>
+          </div>
+          <div class="card-body">
+            <table class="table table-borderless">
+              <tr>
+                <th>Supplier Id</th>
+                <th>Supplier Name</th>
+                <th>Balance</th>
+                <th>Actions</th>
+              </tr>
+              @foreach (var supplier in Model.PendingPayouts) {
+                <tr>
+                  <td class="SupplierId">
+                    <span>@supplier.Id</span>
+                  </td>
+                  <td class="CompanyName">
+                    <span>@supplier.CompanyName</span>
+                  </td>
+                  <td class="Balance">
+                    <span>$@supplier.Balance</span>
+                  </td>
+                  <td>
+                    <a class="btn btn-outline-warning m-1" asp-page-handler="Payout" asp-route-supplierId="@supplier.Id">Payout</a>
+                  </td>
+                </tr>
+              } 
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Payout History</h3>
+          </div>
+          <div class="card-body">
+            <table class="table table-borderless">
+              <tr>
+                <th>Payout Id</th>
+                <th>Amount</th>
+                <th>Payed Out At (UTC)</th>
+                <th>Staff</th>
+                <th>Supplier</th>
+              </tr>
+              @foreach (var payout in Model.PayoutHistory) {
+                <tr>
+                  <td class="PayoutId">
+                    <span>@payout.Id</span>
+                  </td>
+                  <td class="Amount">
+                    <span>$@payout.Amount</span>
+                  </td>
+                  <td class="PayoutDate">
+                    <span>@payout.PayedAt.ToLongDateString()</span>
+                  </td>
+                  <td class="Staff">
+                    <span>@payout.StaffPreferredFirstLastName</span>
+                  </td>
+                  <td class="Supplier">
+                    <span>@payout.SupplierName</span>
+                  </td>
+                </tr>
+              } 
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

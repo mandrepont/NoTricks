@@ -100,15 +100,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
           with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a  asp-active-pages="/Admin/Index" asp-active-exact asp-page="/Admin/Index" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Home
-                <span class="right badge badge-danger">New</span>
-              </p>
+            <a asp-page="Index" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>No Tricks Home</p>
             </a>
           </li>
-          <li class="nav-item has-treeview menu-open">
+          <li class="nav-item">
+            <a  asp-active-pages="/Admin/Index" asp-active-exact asp-page="/Admin/Index" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li asp-active-pages="/Admin/Account" asp-active-class="menu-open" class="nav-item has-treeview">
             <a asp-active-pages="/Admin/Account" href="#" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>
@@ -137,17 +140,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </li>
             </ul>
           </li>
-          <!-- Add icons to the links using the .nav-icon class
-          with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a asp-active-pages="/Admin/Supplier" asp-page="/Admin/Supplier/Index" class="nav-link">
-              <i class="nav-icon fab fa-accessible-icon"></i>
+          <li asp-active-pages="/Admin/Supplier" asp-active-class="menu-open" class="nav-item has-treeview">
+            <a asp-active-pages="/Admin/Supplier" href="#" class="nav-link">
+              <i class="nav-icon fas fa-parachute-box"></i>
               <p>
-                Suppliers
-                <span class="right badge badge-danger">New</span>
+                Supplier Management
+                <i class="right fas fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a asp-active-pages="/Admin/Supplier/Index" asp-active-exact asp-page="/Admin/Supplier/Index" class="nav-link">
+                  <i class="nav-icon fab fa-accessible-icon"></i>
+                  <p>Suppliers</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a asp-active-pages="/Admin/Supplier/Payouts" asp-active-exact asp-page="/Admin/Supplier/Payouts" class="nav-link">
+                  <i class="nav-icon fas fa-hand-holding-usd"></i>
+                  <p>
+                    Payouts
+                    <span class="right badge badge-danger">New</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
           </li>
+          <!-- Add icons to the links using the .nav-icon class
+          with font-awesome or any other icon font library -->
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

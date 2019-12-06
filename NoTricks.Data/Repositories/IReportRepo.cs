@@ -7,5 +7,7 @@ namespace NoTricks.Data.Repositories {
         IEnumerable<AccountStatusCount> GetAccountStatusCount(bool fillData);
         IEnumerable<AccountCreatedCount> GetAccountCreatedCount(DateTime startDateTime, DateTime endDateTime);
         Counts GetCounts();
+        IEnumerable<SupplierPayoutCount> GetSupplierPayoutCounts(DateTime startDateTime, DateTime endDateTime);
+        IEnumerable<SupplierPayoutSum> GetSupplierPayoutSums(DateTime startDateTime, DateTime endDateTime);
     }
 }

@@ -37,7 +37,7 @@ namespace NoTricks.Data.Repositories {
 
         public IEnumerable<AccountCreatedCount> GetAccountCreatedCount(DateTime startDateTime, DateTime endDateTime) {
             if (startDateTime >= endDateTime) {
-                throw new ArgumentOutOfRangeException("startDateTime must be less than endDateTime");
+                throw new ArgumentOutOfRangeException(nameof(startDateTime), "startDateTime must be less than endDateTime");
             }
 
             using var conn = new MySqlConnection(_connStr);
@@ -63,12 +63,58 @@ namespace NoTricks.Data.Repositories {
             conn.Open();
             var sql = $@"
                 SELECT 
-                  (SELECT COUNT(*) FROM Accounts WHERE Status = @status) AS {nameof(Counts.PendingAccounts)},
+                  (SELECT SUM(Balance) FROM Suppliers) AS {nameof(Counts.PendingPayoutSum)},
                   (SELECT COUNT(*) FROM Accounts) AS {nameof(Counts.Accounts)},
                   (SELECT COUNT(*) FROM Suppliers) AS {nameof(Counts.Suppliers)},
-                  (122) AS {nameof(Counts.Products)}
+                  (SELECT SUM(Amount) FROM SupplierPayouts) AS {nameof(Counts.PayoutSum)}
             ";
-            return conn.QuerySingle<Counts>(sql, new {status = AccountStatus.PendingVerification});
+            return conn.QuerySingle<Counts>(sql);
+        }
+
+        public IEnumerable<SupplierPayoutCount> GetSupplierPayoutCounts(DateTime startDateTime, DateTime endDateTime) {
+            if (startDateTime >= endDateTime) {
+                throw new ArgumentOutOfRangeException(nameof(startDateTime), "startDateTime must be less than endDateTime");
+            }
+
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                SELECT 
+                    (CAST(PayedAt AS Date)) AS {nameof(SupplierPayoutCount.PayedAt)},
+                    Count(*) AS {nameof(SupplierPayoutCount.Count)}
+                FROM SupplierPayouts
+                WHERE PayedAt BETWEEN @startDateTime AND @endDateTime
+                GROUP BY CAST(PayedAt AS Date)
+            ";
+            var data = conn.Query<SupplierPayoutCount>(sql, new {startDateTime, endDateTime}).ToList();
+            var days = Enumerable.Range(1, endDateTime.Subtract(startDateTime).Days - 1)
+                .Select(offset => startDateTime.AddDays(offset))
+                .Where(dateTime => !data.Exists(x => x.PayedAt.Equals(dateTime)))
+                .Select(dateTime => new SupplierPayoutCount(dateTime, 0));
+            return data.Concat(days);
+        }
+
+        public IEnumerable<SupplierPayoutSum> GetSupplierPayoutSums(DateTime startDateTime, DateTime endDateTime) {
+            if (startDateTime >= endDateTime) {
+                throw new ArgumentOutOfRangeException(nameof(startDateTime), "startDateTime must be less than endDateTime");
+            }
+
+            using var conn = new MySqlConnection(_connStr);
+            conn.Open();
+            var sql = $@"
+                SELECT 
+                    (CAST(PayedAt AS Date)) AS {nameof(SupplierPayoutSum.PayedAt)},
+                    SUM(Amount) AS {nameof(SupplierPayoutSum.Sum)}
+                FROM SupplierPayouts
+                WHERE PayedAt BETWEEN @startDateTime AND @endDateTime
+                GROUP BY CAST(PayedAt AS Date)
+            ";
+            var data = conn.Query<SupplierPayoutSum>(sql, new {startDateTime, endDateTime}).ToList();
+            var days = Enumerable.Range(1, endDateTime.Subtract(startDateTime).Days - 1)
+                .Select(offset => startDateTime.AddDays(offset))
+                .Where(dateTime => !data.Exists(x => x.PayedAt.Equals(dateTime)))
+                .Select(dateTime => new SupplierPayoutSum(dateTime, 0));
+            return data.Concat(days);
         }
     }
 }
