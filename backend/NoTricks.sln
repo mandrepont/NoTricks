@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoTricks.API", "NoTricks.API\NoTricks.API.csproj", "{CF06E776-C34C-4DB1-82B7-407165F105BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoTricks.Data", "NoTricks.Data\NoTricks.Data.csproj", "{A6D1965E-51FA-4189-A940-B27C32DC62D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoTricks.CLI", "NoTricks.CLI\NoTricks.CLI.csproj", "{056B899B-9CF6-497F-A3BB-92F3540BDA07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{CF06E776-C34C-4DB1-82B7-407165F105BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF06E776-C34C-4DB1-82B7-407165F105BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF06E776-C34C-4DB1-82B7-407165F105BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6D1965E-51FA-4189-A940-B27C32DC62D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6D1965E-51FA-4189-A940-B27C32DC62D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6D1965E-51FA-4189-A940-B27C32DC62D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6D1965E-51FA-4189-A940-B27C32DC62D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{056B899B-9CF6-497F-A3BB-92F3540BDA07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{056B899B-9CF6-497F-A3BB-92F3540BDA07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{056B899B-9CF6-497F-A3BB-92F3540BDA07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{056B899B-9CF6-497F-A3BB-92F3540BDA07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
