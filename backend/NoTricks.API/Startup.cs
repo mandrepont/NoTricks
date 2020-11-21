@@ -2,15 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NoTricks.Data;
+using NoTricks.Data.Models;
 
 namespace NoTricks.API {
     public class Startup {
@@ -22,6 +26,20 @@ namespace NoTricks.API {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
+            services.AddDbContext<AuthorizationDbContext>(options => {
+                options.UseSqlite("Data Source=auth.db", x => x.MigrationsAssembly(typeof(AuthorizationDbContext).Assembly.FullName));
+            });
+            
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<AuthorizationDbContext>();
+
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential();
+            //.AddApiAuthorization<ApplicationUser, AuthorizationDbContext>();
+
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
+            
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "NoTricks.API", Version = "v1"});
@@ -40,6 +58,10 @@ namespace NoTricks.API {
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            
+            app.UseIdentityServer();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
