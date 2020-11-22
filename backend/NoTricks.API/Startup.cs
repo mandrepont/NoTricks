@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,20 +28,34 @@ namespace NoTricks.API {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddDbContext<AuthorizationDbContext>(options => {
-                options.UseSqlite("Data Source=auth.db", x => x.MigrationsAssembly(typeof(AuthorizationDbContext).Assembly.FullName));
+                options.UseSqlite("Data Source=auth.db",
+                    x => x.MigrationsAssembly(typeof(AuthorizationDbContext).Assembly.FullName));
             });
-            
+
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<AuthorizationDbContext>();
 
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential();
-            //.AddApiAuthorization<ApplicationUser, AuthorizationDbContext>();
+            var builder = services.AddIdentityServer(options => {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+                    // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
+                    options.EmitStaticAudienceClaim = true;
+                })
+                .AddInMemoryIdentityResources(IdentityConfig.IdentityResources)
+                .AddInMemoryApiScopes(IdentityConfig.ApiScopes)
+                .AddInMemoryClients(IdentityConfig.Clients)
+                .AddAspNetIdentity<ApplicationUser>();
+
+            // not recommended for production - you need to store your key material somewhere secure
+            builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-            
+
             services.AddControllers();
+            services.AddRazorPages();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "NoTricks.API", Version = "v1"});
             });
@@ -59,12 +74,15 @@ namespace NoTricks.API {
             app.UseRouting();
 
             app.UseAuthentication();
-            
+
             app.UseIdentityServer();
-            
+
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+            });
         }
     }
 }
