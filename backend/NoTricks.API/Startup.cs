@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,6 +43,11 @@ namespace NoTricks.API {
                     options.Events.RaiseSuccessEvents = true;
                     // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                     options.EmitStaticAudienceClaim = true;
+                    options.UserInteraction = new UserInteractionOptions {
+                        LogoutUrl = "/Identity/Account/Logout",
+                        LoginUrl = "/Identity/Account/Login",
+                        LoginReturnUrlParameter = "returnUrl"
+                    };
                 })
                 .AddInMemoryIdentityResources(IdentityConfig.IdentityResources)
                 .AddInMemoryApiScopes(IdentityConfig.ApiScopes)

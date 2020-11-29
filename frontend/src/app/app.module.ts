@@ -4,10 +4,12 @@ import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule, LogLevel, OidcConfigService } from 'angular-auth-oidc-client';
+import {HomeComponent} from './home/home.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -30,10 +32,13 @@ export class AppModule { }
 export function configureAuth(oidcConfigService: OidcConfigService): any {
   return () =>
     oidcConfigService.withConfig({
-      stsServer: 'https://offeringsolutions-sts.azurewebsites.net',
+      stsServer: 'https://localhost:5001',
       redirectUrl: window.location.origin,
+      postLoginRoute: '/home',
+      forbiddenRoute: '/forbidden',
+      unauthorizedRoute: '/unauthorized',
       postLogoutRedirectUri: window.location.origin,
-      clientId: 'angularClient',
+      clientId: 'notricks.frontend',
       scope: 'openid profile email',
       responseType: 'code',
       silentRenew: true,

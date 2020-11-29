@@ -9,6 +9,7 @@ namespace NoTricks.Data {
             new List<IdentityResource> {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email()
             };
         
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -25,13 +26,14 @@ namespace NoTricks.Data {
                   AllowedGrantTypes = GrantTypes.Code,
                   RequireClientSecret = false,
                   
-                  RedirectUris = { "http://localhost:4200/login-callback" },
+                  RedirectUris = { "http://localhost:4200/login-callback", "http://localhost:4200" },
                   PostLogoutRedirectUris = { "http://localhost:4200" },
                   AllowedCorsOrigins = { "http://localhost:4200" },
                   
                   AllowedScopes = {
                       IdentityServerConstants.StandardScopes.OpenId,
                       IdentityServerConstants.StandardScopes.Profile,
+                      IdentityServerConstants.StandardScopes.Email,
                       ApiScopes.Single().Name //Risky code will throw
                   }
                 }
